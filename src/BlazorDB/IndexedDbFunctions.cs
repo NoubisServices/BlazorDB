@@ -8,5 +8,6 @@ namespace BlazorDB
         public const string UPDATE_ITEM = "updateItem";
         public const string DELETE_ITEM = "deleteItem";
         public const string FIND_ITEM = "findItem";
+        public const string GET_ALL_ITEMS = "getAllItems";
     }
 }

@@ -98,6 +98,19 @@ window.blazorDB = {
         });
         return promise;
     },
+    getAllItems: function (dotnetReference, transaction, item) {
+        var promise = new Promise((resolve, reject) => {
+            window.blazorDB.getTable(item.dbName, item.storeName).then(table => {
+                table.getAll().then(_ => {
+                    dotnetReference.invokeMethodAsync('BlazorDBCallback', transaction, false, 'Retreieved all items');
+                }).catch(e => {
+                    console.error(e);
+                    dotnetReference.invokeMethodAsync('BlazorDBCallback', transaction, true, 'Could not retreive items');
+                });
+            });
+        });
+        return promise;
+    },
     getDb: function(dbName) {
         return new Promise((resolve, reject) => {
             if(window.blazorDB.databases.find(d => d.name == dbName) === undefined) {

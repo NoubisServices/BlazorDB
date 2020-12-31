@@ -196,6 +196,30 @@ namespace BlazorDB
         }
         
         /// <summary>
+        /// Retrieve all items
+        /// </summary>
+        /// <typeparam name="TInput"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="storeName">The name of the store to retrieve the record from</param>
+        /// <returns></returns>
+        public async Task<TResult> GetAllRecordsAsync<TInput, TResult>(string storeName)
+        {
+            var trans = GenerateTransaction(null);
+
+            var data = new { DbName = DbName, StoreName = storeName };
+            try
+            {
+                return await CallJavascript<TResult>(IndexedDbFunctions.GET_ALL_ITEMS, trans, data);
+            }
+            catch (JSException jse)
+            {
+                RaiseEvent(trans, true, jse.Message);
+            }
+
+            return default(TResult);
+        }
+        
+        /// <summary>
         /// Deletes a record from the store based on the id
         /// </summary>
         /// <typeparam name="TInput"></typeparam>
