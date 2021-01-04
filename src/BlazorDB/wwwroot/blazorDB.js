@@ -101,11 +101,13 @@ window.blazorDB = {
     getAllItems: function (dotnetReference, transaction, item) {
         var promise = new Promise((resolve, reject) => {
             window.blazorDB.getTable(item.dbName, item.storeName).then(table => {
-                table.getAll().then(_ => {
+                table.toCollection().toArray().then(_ => {
                     dotnetReference.invokeMethodAsync('BlazorDBCallback', transaction, false, 'Retreieved all items');
+                    resolve(_);
                 }).catch(e => {
                     console.error(e);
                     dotnetReference.invokeMethodAsync('BlazorDBCallback', transaction, true, 'Could not retreive items');
+                    reject(e);
                 });
             });
         });
